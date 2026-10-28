@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { analyze, suppress, toCSV, type Dataset } from "@/lib/hospital-data";
 import { useQuery } from "@tanstack/react-query";
+import { AskPanel } from "@/components/AskPanel";
 import { datasetQuery } from "@/lib/hospital-db";
 
 export const Route = createFileRoute("/")({
@@ -97,6 +98,8 @@ function Dashboard({ data }: { data: Dataset }) {
             </div>
           ))}
         </div>
+
+        <AskPanel />
 
         <Panel title="Monthly visit trend" note="Total visits per calendar month">
           <div className="h-64">
