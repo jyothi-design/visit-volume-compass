@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddRouteImport } from './routes/add'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
+import { Route as ApiPublicAskRouteImport } from './routes/api/public/ask'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const ToolkitRoute = ToolkitRouteImport.update({
   path: '/toolkit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAskRoute = ApiPublicAskRouteImport.update({
+  id: '/api/public/ask',
+  path: '/api/public/ask',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
+  '/api/public/ask': typeof ApiPublicAskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
+  '/api/public/ask': typeof ApiPublicAskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
+  '/api/public/ask': typeof ApiPublicAskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add' | '/auth' | '/toolkit'
+  fullPaths: '/' | '/add' | '/auth' | '/toolkit' | '/api/public/ask'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/auth' | '/toolkit'
-  id: '__root__' | '/' | '/add' | '/auth' | '/toolkit'
+  to: '/' | '/add' | '/auth' | '/toolkit' | '/api/public/ask'
+  id: '__root__' | '/' | '/add' | '/auth' | '/toolkit' | '/api/public/ask'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   AddRoute: typeof AddRoute
   AuthRoute: typeof AuthRoute
   ToolkitRoute: typeof ToolkitRoute
+  ApiPublicAskRoute: typeof ApiPublicAskRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolkitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ask': {
+      id: '/api/public/ask'
+      path: '/api/public/ask'
+      fullPath: '/api/public/ask'
+      preLoaderRoute: typeof ApiPublicAskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddRoute: AddRoute,
   AuthRoute: AuthRoute,
   ToolkitRoute: ToolkitRoute,
+  ApiPublicAskRoute: ApiPublicAskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
