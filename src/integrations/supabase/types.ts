@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      departments: {
+        Row: {
+          department_id: number
+          department_name: string
+        }
+        Insert: {
+          department_id?: number
+          department_name: string
+        }
+        Update: {
+          department_id?: number
+          department_name?: string
+        }
+        Relationships: []
+      }
+      patients: {
+        Row: {
+          age_band: string
+          created_at: string
+          gender_optional: string | null
+          patient_id: number
+        }
+        Insert: {
+          age_band: string
+          created_at?: string
+          gender_optional?: string | null
+          patient_id?: number
+        }
+        Update: {
+          age_band?: string
+          created_at?: string
+          gender_optional?: string | null
+          patient_id?: number
+        }
+        Relationships: []
+      }
+      visits: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          department_id: number
+          patient_id: number
+          visit_date: string
+          visit_id: number
+          visit_type: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          department_id: number
+          patient_id: number
+          visit_date?: string
+          visit_id?: number
+          visit_type: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          department_id?: number
+          patient_id?: number
+          visit_date?: string
+          visit_id?: number
+          visit_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visits_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["department_id"]
+          },
+          {
+            foreignKeyName: "visits_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["patient_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
