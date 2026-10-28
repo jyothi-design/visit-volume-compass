@@ -51,9 +51,7 @@ function AuthPage() {
         <div className="space-y-1.5"><Label htmlFor="pw">Password</Label><Input id="pw" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></div>
         {msg && <p className="text-sm text-muted-foreground">{msg}</p>}
         <Button type="submit" className="w-full" disabled={busy}>{mode === "in" ? "Sign in" : "Create account"}</Button>
-        <button type="button" className="w-full text-center text-sm text-primary hover:underline" onClick={() => setMode(mode === "in" ? "up" : "in")}>
-          {mode === "in" ? "New staff member? Create an account" : "Already have an account? Sign in"}
-        </button>
+        <p className="text-center text-xs text-muted-foreground">Accounts are created by the administrator.</p>
       </form>
     </div>
   );
