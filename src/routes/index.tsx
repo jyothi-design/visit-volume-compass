@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { analyze, suppress, toCSV, type Dataset } from "@/lib/hospital-data";
 import { useQuery } from "@tanstack/react-query";
 import { datasetQuery } from "@/lib/hospital-db";
-import { RequireAuth } from "@/components/RequireAuth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,7 +22,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <RequireAuth><DashboardLoader /></RequireAuth>,
+  component: DashboardLoader,
 });
 
 const C = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
