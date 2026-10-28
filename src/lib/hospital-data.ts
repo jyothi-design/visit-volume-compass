@@ -33,8 +33,8 @@ function rng(seed: number) {
 function pick<T>(r: () => number, items: T[], weights: number[]) {
   const total = weights.reduce((a, b) => a + b, 0);
   let x = r() * total;
-  for (let i = 0; i < items.length; i++) if ((x -= weights[i]) < 0) return items[i];
-  return items[items.length - 1];
+  for (let i = 0; i < items.length; i++) if ((x -= weights[i]!) < 0) return items[i]!;
+  return items[items.length - 1]!;
 }
 
 export function generateData(seed = 7) {
@@ -76,10 +76,10 @@ export function stats(values: number[]) {
   const mean = s.reduce((a, b) => a + b, 0) / n;
   const q = (p: number) => {
     const i = (n - 1) * p, lo = Math.floor(i), hi = Math.ceil(i);
-    return s[lo] + (s[hi] - s[lo]) * (i - lo);
+    return s[lo]! + (s[hi]! - s[lo]!) * (i - lo);
   };
   const std = Math.sqrt(s.reduce((a, b) => a + (b - mean) ** 2, 0) / n);
-  return { mean, median: q(0.5), std, min: s[0], max: s[n - 1], p90: q(0.9) };
+  return { mean, median: q(0.5), std, min: s[0]!, max: s[n - 1]!, p90: q(0.9) };
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -106,7 +106,7 @@ export function analyze(data: ReturnType<typeof generateData>, departmentId: num
     const a = age.get(band) ?? { visits: 0, patients: new Set() };
     a.visits++; a.patients.add(x.patient_id); age.set(band, a);
     type.set(x.visit_type, (type.get(x.visit_type) ?? 0) + 1);
-    dow[new Date(x.visit_date + "T00:00:00Z").getUTCDay()]++;
+    dow[new Date(x.visit_date + "T00:00:00Z").getUTCDay()]!++;
   }
 
   const total = v.length;
@@ -133,7 +133,7 @@ export function analyze(data: ReturnType<typeof generateData>, departmentId: num
       band: b, visits: age.get(b)?.visits ?? 0, patients: age.get(b)?.patients.size ?? 0,
     })),
     visitTypes: VISIT_TYPES.map((t) => ({ type: t, visits: type.get(t) ?? 0 })).filter((t) => t.visits),
-    weekday: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => ({ day: d, visits: dow[i] })),
+    weekday: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => ({ day: d, visits: dow[i]! })),
   };
 }
 
