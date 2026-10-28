@@ -51,7 +51,7 @@ function AddPage() {
     e.preventDefault();
     const { data, error } = await supabase.from("patients")
       .insert({ age_band: age, gender_optional: gender === "none" ? null : gender }).select("patient_id").single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Patient #${data.patient_id} added`);
     setPatientId(String(data.patient_id));
     refresh();
@@ -64,11 +64,11 @@ function AddPage() {
   const [type, setType] = useState<string>("Outpatient");
   async function addVisit(e: React.FormEvent) {
     e.preventDefault();
-    if (!deptId) return toast.error("Choose a department");
+    if (!deptId) { toast.error("Choose a department"); return; }
     const { error } = await supabase.from("visits").insert({
       patient_id: Number(patientId), department_id: Number(deptId), visit_date: date, visit_type: type,
     });
-    if (error) return toast.error(error.message.includes("foreign key") ? "No patient with that number" : error.message);
+    if (error) { toast.error(error.message.includes("foreign key") ? "No patient with that number" : error.message); return; }
     toast.success("Visit recorded");
     refresh();
   }
@@ -78,7 +78,7 @@ function AddPage() {
   async function addDept(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("departments").insert({ department_name: deptName.trim() });
-    if (error) return toast.error(error.message.includes("duplicate") ? "That department already exists" : error.message);
+    if (error) { toast.error(error.message.includes("duplicate") ? "That department already exists" : error.message); return; }
     toast.success("Department added");
     setDeptName("");
     refresh();
