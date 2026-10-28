@@ -55,7 +55,7 @@ export function generateData(seed = 7) {
     const base = (dow === 0 ? 12 : dow === 6 ? 18 : 28) * seasonal;
     const n = Math.round(base + (r() - 0.5) * 10);
     for (let k = 0; k < n; k++) {
-      const p = patients[Math.floor(r() * patients.length)];
+      const p = patients[Math.floor(r() * patients.length)]!;
       const department_id = pick(r, DEPARTMENTS, deptW).department_id;
       visits.push({
         visit_id: visits.length + 1,
@@ -139,6 +139,6 @@ export function analyze(data: ReturnType<typeof generateData>, departmentId: num
 
 export function toCSV(rows: Record<string, string | number>[]) {
   if (!rows.length) return "";
-  const keys = Object.keys(rows[0]);
+  const keys = Object.keys(rows[0]!);
   return [keys.join(","), ...rows.map((r) => keys.map((k) => JSON.stringify(r[k])).join(","))].join("\n");
 }
