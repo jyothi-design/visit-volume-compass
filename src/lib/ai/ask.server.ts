@@ -52,7 +52,7 @@ export function buildSummary(data: Dataset) {
     total_visits: suppress(all.total),
     daily_visit_stats: Object.fromEntries(Object.entries(all.dailyStats).map(([k, v]) => [k, Number(v.toFixed(2))])),
     monthly_totals: Object.fromEntries(all.monthly.map((m) => [m.month, suppress(m.visits)])),
-    departments: all.departments.map((d) => ({ name: d.name, visits: suppress(d.visits), share_pct: +(d.share * 100).toFixed(1), avg_per_active_day: +d.avgPerDay.toFixed(1) })),
+    departments: all.departments.map((d) => ({ name: d.name, visits: suppress(d.visits), ...(d.visits >= 5 ? { share_pct: +(d.share * 100).toFixed(1), avg_per_active_day: +d.avgPerDay.toFixed(1) } : {}) })),
     department_monthly: byDeptMonth,
     weekday_totals: Object.fromEntries(all.weekday.map((w) => [w.day, suppress(w.visits)])),
     visit_types: Object.fromEntries(all.visitTypes.map((t) => [t.type, suppress(t.visits)])),
