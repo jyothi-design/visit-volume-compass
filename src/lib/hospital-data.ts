@@ -84,7 +84,8 @@ export function stats(values: number[]) {
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function analyze(data: ReturnType<typeof generateData>, departmentId: number | null) {
+export type Dataset = { patients: Patient[]; departments: Department[]; visits: Visit[] };
+export function analyze(data: Dataset, departmentId: number | null) {
   const ageOf = new Map(data.patients.map((p) => [p.patient_id, p.age_band]));
   const v = departmentId ? data.visits.filter((x) => x.department_id === departmentId) : data.visits;
 
@@ -118,7 +119,7 @@ export function analyze(data: ReturnType<typeof generateData>, departmentId: num
     monthly: [...monthly.entries()].sort().map(([k, n]) => ({
       month: `${MONTHS[Number(k.slice(5)) - 1]} ${k.slice(2, 4)}`, visits: n,
     })),
-    departments: DEPARTMENTS.map((d) => {
+    departments: data.departments.map((d) => {
       const e = dept.get(d.department_id);
       const visits = e?.visits ?? 0;
       return {

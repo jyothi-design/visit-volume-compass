@@ -7,7 +7,10 @@ import { Download } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { analyze, DEPARTMENTS, generateData, suppress, toCSV } from "@/lib/hospital-data";
+import { analyze, suppress, toCSV, type Dataset } from "@/lib/hospital-data";
+import { useQuery } from "@tanstack/react-query";
+import { datasetQuery } from "@/lib/hospital-db";
+import { RequireAuth } from "@/components/RequireAuth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,10 +23,9 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Dashboard,
+  component: () => <RequireAuth><DashboardLoader /></RequireAuth>,
 });
 
-const data = generateData();
 const C = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
 const tip = { contentStyle: { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 6, fontSize: 12 } };
 
@@ -49,9 +51,16 @@ function Panel({ title, note, children, action }: { title: string; note?: string
   );
 }
 
-function Dashboard() {
+function DashboardLoader() {
+  const q = useQuery(datasetQuery);
+  if (q.error) return <div className="p-10 text-center text-sm text-destructive">Couldn't load data.</div>;
+  if (!q.data) return <div className="min-h-screen bg-background"><SiteHeader /><p className="p-10 text-center text-sm text-muted-foreground">Loading records…</p></div>;
+  return <Dashboard data={q.data} />;
+}
+
+function Dashboard({ data }: { data: Dataset }) {
   const [dept, setDept] = useState("all");
-  const a = useMemo(() => analyze(data, dept === "all" ? null : Number(dept)), [dept]);
+  const a = useMemo(() => analyze(data, dept === "all" ? null : Number(dept)), [dept, data]);
   const s = a.dailyStats;
 
   const kpis = [
@@ -69,14 +78,14 @@ function Dashboard() {
       <main className="mx-auto max-w-7xl space-y-6 px-6 py-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-accent-foreground">Nov 2025 – Oct 2026 · 12 months</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-accent-foreground">Live records · {a.total.toLocaleString()} visits</p>
             <h1 className="font-display text-4xl font-bold">Patient visit overview</h1>
           </div>
           <Select value={dept} onValueChange={setDept}>
             <SelectTrigger className="w-64 bg-card"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All departments</SelectItem>
-              {DEPARTMENTS.map((d) => <SelectItem key={d.department_id} value={String(d.department_id)}>{d.department_name}</SelectItem>)}
+              {data.departments.map((d) => <SelectItem key={d.department_id} value={String(d.department_id)}>{d.department_name}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>

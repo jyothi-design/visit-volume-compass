@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AddRouteImport } from './routes/add'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddRoute = AddRouteImport.update({
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolkitRoute = ToolkitRouteImport.update({
@@ -25,27 +37,35 @@ const ToolkitRoute = ToolkitRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/auth': typeof AuthRoute
   '/toolkit': typeof ToolkitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/toolkit'
+  fullPaths: '/' | '/add' | '/auth' | '/toolkit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/toolkit'
-  id: '__root__' | '/' | '/toolkit'
+  to: '/' | '/add' | '/auth' | '/toolkit'
+  id: '__root__' | '/' | '/add' | '/auth' | '/toolkit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddRoute: typeof AddRoute
+  AuthRoute: typeof AuthRoute
   ToolkitRoute: typeof ToolkitRoute
 }
 
@@ -56,6 +76,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add': {
+      id: '/add'
+      path: '/add'
+      fullPath: '/add'
+      preLoaderRoute: typeof AddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/toolkit': {
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddRoute: AddRoute,
+  AuthRoute: AuthRoute,
   ToolkitRoute: ToolkitRoute,
 }
 export const routeTree = rootRouteImport
