@@ -67,7 +67,7 @@ Rules:
 - Values like "<5" are suppressed small counts; treat them as fewer than five, never guess exact values.
 - Never discuss individual patients, never attempt re-identification.
 - Never give diagnoses, medical or treatment advice; decline such questions politely.
-- Keep answers under 200 words. End with: "Operational statistics only — not clinical advice."`;
+- Plain text only, no markdown symbols. Keep answers under 200 words. End with: "Operational statistics only — not clinical advice."`;
 
 export async function handleAsk(request: Request) {
   let question = "";
