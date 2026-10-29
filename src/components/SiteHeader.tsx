@@ -20,7 +20,9 @@ export function SiteHeader() {
           {session ? (<>
           <Link to="/add" className="text-muted-foreground hover:text-foreground" activeProps={{ className: "text-foreground" }}>Add data</Link>
           <button className="text-muted-foreground hover:text-foreground" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/auth" }); }}>Sign out</button>
-          </>) : null}
+          </>) : (
+          <Link to="/auth" className="text-muted-foreground hover:text-foreground">Sign in</Link>
+          )}
         </nav>
       </div>
       <div className="bg-secondary px-6 py-2 text-center text-xs text-secondary-foreground">
