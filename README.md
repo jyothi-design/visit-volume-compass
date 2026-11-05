@@ -30,7 +30,7 @@ Acceptance criteria: Use synthetic/de-identified data; restrict access to record
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://visit-volume-compass.lovable.app
+**Live app**:  https://visit-volume-compass-public.vercel.app/
 
 ## Build with Lovable
 
